@@ -61,8 +61,8 @@ if uploaded_file:
 
         # Split text
         splitter = RecursiveCharacterTextSplitter(
-            chunk_size=800,
-            chunk_overlap=150
+            chunk_size=400,
+            chunk_overlap=50
         )
         chunks = splitter.split_documents(documents)
 
@@ -73,7 +73,7 @@ if uploaded_file:
 
         # Vector DB
         vectorstore = FAISS.from_documents(chunks, embeddings)
-        retriever = vectorstore.as_retriever(search_kwargs={"k": 2})
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 1})
 
 
     st.success("✅ PDF processed successfully")
