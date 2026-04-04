@@ -33,7 +33,9 @@ if USE_GROQ:
         st.error("❌ GROQ_API_KEY not found")
         st.stop()
 
-    llm = ChatGroq(model="llama-3.1-8b-instant", temperature=0, max_token=300)
+    llm = ChatGroq(model="llama-3.1-8b-instant",
+                   temperature=0, 
+                   max_token=300)
     st.success("🌐 Running on Groq (Cloud)")
 
 else:
@@ -79,17 +81,14 @@ if uploaded_file:
     st.success("✅ PDF processed successfully")
 
     def format_docs(docs):
-       return "\n\n".join(doc.page_content[:300] for doc in docs)
+       combined = "\n\n".join(doc.page_content for doc in docs)
+       return combined[:800]   
     # -------------------------------
     # Prompt
     # -------------------------------
     prompt = ChatPromptTemplate.from_template(
     """
-    Answer ONLY using the resume content provided below.
-    Do not make up information.
-    
-    If answer is not found, say:
-    "Information not available in the resume."
+    Answer using the resume only.
     
     RESUME DATA:
     {context}
