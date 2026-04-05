@@ -7,7 +7,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
 
-from langchain_ollama import OllamaLLM
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
@@ -19,9 +18,9 @@ st.set_page_config(page_title="AI Resume Chatbot", page_icon="🤖")
 st.title("🤖 AI Resume Chatbot (RAG)")
 st.write("Upload any PDF and chat with it")
 
-   # -------------------------------
-    # LLM
-    # -------------------------------
+# -------------------------------
+# LLM
+# -------------------------------
 USE_GROQ = os.getenv("USE_GROQ", "false").lower() == "true"
 
 if USE_GROQ:
@@ -33,9 +32,12 @@ if USE_GROQ:
         st.error("❌ GROQ_API_KEY not found")
         st.stop()
 
-    llm = ChatGroq(model="llama-3.1-8b-instant",
-                   temperature=0, 
-                   max_token=300)
+    llm = ChatGroq(
+        model="llama-3.1-8b-instant",
+        temperature=0,
+        max_tokens=300,
+        api_key=groq_api_key 
+    )
     st.success("🌐 Running on Groq (Cloud)")
 
 else:
@@ -89,7 +91,7 @@ if uploaded_file:
     prompt = ChatPromptTemplate.from_template(
     """
     Answer using the resume only.
-    
+
     RESUME DATA:
     {context}
     
